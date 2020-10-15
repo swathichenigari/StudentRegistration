@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.student.registration.bo.Address;
 import com.student.registration.bo.Student;
 import com.student.registration.repo.StudentRepo;
 

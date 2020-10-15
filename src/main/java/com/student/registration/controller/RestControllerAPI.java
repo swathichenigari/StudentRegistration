@@ -2,6 +2,8 @@ package com.student.registration.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.student.registration.bo.Address;
 import com.student.registration.bo.Student;
-import com.student.registration.dto.StudentDTO;
+import com.student.registration.exceptions.NoSuchStudent;
 import com.student.registration.interfaces.services.AddressService;
 import com.student.registration.interfaces.services.StudentService;
-import com.student.registration.mapper.StudentMapper;
 
 @RestController
 @RequestMapping("/api")
 public class RestControllerAPI {
 	
-	@Autowired(required=true)
-	private StudentMapper studentMapper;
-
 	@Autowired
 	private StudentService studentService;
-
+	
 	@Autowired
 	private AddressService addressService;
 
@@ -45,9 +43,8 @@ public class RestControllerAPI {
 	}
 
 	@PostMapping("/saveStudent")
-	public boolean insertStudent(@RequestBody StudentDTO studentdto) {
-		Student student = studentMapper.dtotoentity(studentdto);
-		studentService.insertStudnet(student);
+	public boolean insertStudent(@Valid@RequestBody Student student) {
+		studentService.insertStudnet(student);	
 		return true;
 	}
 
@@ -86,6 +83,11 @@ public class RestControllerAPI {
 	public ResponseEntity<Student> updateStudent(@RequestBody Student studentInfo) {	
 		studentService.updateStudent(studentInfo);
 		return new ResponseEntity<Student>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/getStudent/{id}")
+	public Student getStudentById(@PathVariable int id) throws NoSuchStudent {
+		throw new NoSuchStudent();
 	}
 
 }
