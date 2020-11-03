@@ -25,10 +25,8 @@ public class Student {
 	private int id;
 	@NotNull
 	private String name;
-	@NotBlank
 	private long mobileNo;
 	private String gender;
-	@Pattern(regexp ="dd-mm-yyy")
 	private Date dateofBirth;
 	private String caste;
 	@Min(15)

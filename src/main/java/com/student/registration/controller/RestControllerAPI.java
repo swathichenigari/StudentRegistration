@@ -18,22 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.student.registration.bo.Address;
 import com.student.registration.bo.Student;
-import com.student.registration.exceptions.NoSuchStudent;
 import com.student.registration.interfaces.services.AddressService;
 import com.student.registration.interfaces.services.StudentService;
 
 @RestController
 @RequestMapping("/api")
 public class RestControllerAPI {
-	
+
 	@Autowired
 	private StudentService studentService;
-	
+
 	@Autowired
 	private AddressService addressService;
 
 	@GetMapping("/students")
 	public List<Student> getStudents() {
+		studentService.getStudents().forEach(e-> e.setId(e.getAge()*2));
 		return studentService.getStudents();
 	}
 
@@ -43,15 +43,15 @@ public class RestControllerAPI {
 	}
 
 	@PostMapping("/saveStudent")
-	public boolean insertStudent(@Valid@RequestBody Student student) {
-		studentService.insertStudnet(student);	
-		return true;
+	public ResponseEntity<Student> insertStudent(@Valid @RequestBody Student student) {
+		studentService.insertStudnet(student);
+		return new ResponseEntity<Student>(student, HttpStatus.OK);
 	}
 
 	@PostMapping("/saveAddress")
-	public boolean insertStudent(@RequestBody Address address) {
+	public ResponseEntity<Address> insertAddress(@Valid@RequestBody Address address) {
 		addressService.insertAddress(address);
-		return true;
+		return new ResponseEntity<Address>(address, HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/deleteAddress/{id}")
@@ -72,22 +72,22 @@ public class RestControllerAPI {
 		}
 		return new ResponseEntity<Student>(HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/updateAddress")
-	public ResponseEntity<Address> updateAddress(@RequestBody Address addressInfo) {	
+	public ResponseEntity<Address> updateAddress(@Valid@RequestBody Address addressInfo) {
 		addressService.updateAddress(addressInfo);
 		return new ResponseEntity<Address>(HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/updateStudent")
-	public ResponseEntity<Student> updateStudent(@RequestBody Student studentInfo) {	
+	public ResponseEntity<Student> updateStudent(@Valid@RequestBody Student studentInfo) {
 		studentService.updateStudent(studentInfo);
 		return new ResponseEntity<Student>(HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getStudent/{id}")
-	public Student getStudentById(@PathVariable int id) throws NoSuchStudent {
-		throw new NoSuchStudent();
+	public java.util.Optional<Student> getStudentById(@PathVariable int id) {
+		return studentService.getStudentById(id);
 	}
 
 }
